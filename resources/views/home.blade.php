@@ -7,9 +7,8 @@
         <div class="row justify-content-center">
             <div class="col-md-8">
                 <div class="card text-danger lead">
-                    This site is very much a work in progress.
-                    Currently it only contains dances done since September, 2018,
-                    and perhaps more.
+                    This site is very much a work in progress and may not always be available and working properly.
+                    Currently it only displays a twelve month window, from today.
                 </div>
                 <div class="card">
                     <div class="card-header">
