@@ -19,7 +19,6 @@ window.Vue = require('vue');
 // const files = require.context('./', true, /\.vue$/i);
 // files.keys().map(key => Vue.component(key.split('/').pop().split('.')[0], files(key).default));
 
-Vue.component('dance-records', require('./components/DanceExample.vue').default);
 Vue.component('dances-by-date', require('./components/DancesByDate.vue').default);
 
 /**
