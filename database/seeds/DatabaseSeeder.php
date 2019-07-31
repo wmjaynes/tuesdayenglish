@@ -17,34 +17,11 @@ class DatabaseSeeder extends Seeder
      */
     public function run()
     {
-        Event::listen('illuminate.query', function($query)
-        {
-            var_dump($query);
-        });
-        // $this->call(UsersTableSeeder::class);
-
-
-        $this->getCallers();
-        $this->getDances();
-
-
-//        $sql = DB::table('dances')
-//            ->join('caller_dance', 'caller_dance.dance_id', '=', 'dances.id' )
-//            ->join('callers', 'caller_dance.caller_id', '=', 'callers.id')
-//            ->orderBy('caller_dance.date_of', 'desc')->toSql();
-//        var_dump($sql);
-
-        $dances_callers = DB::table('dances')
-        ->join('caller_dance', 'caller_dance.dance_id', '=', 'dances.id' )
-        ->join('callers', 'caller_dance.caller_id', '=', 'callers.id')
-        ->orderBy('caller_dance.date_of', 'desc')
-            ->select('dances.name as dance_name', 'caller_dance.date_of', 'callers.name as caller_name')
-            ->get();
-
-
+        $this->loadCallers();
+        $this->loadDances();
     }
 
-    protected function getCallers() {
+    protected function loadCallers() {
         $apiKey = env('SHEETS_API_KEY');
         $sheet_18_19 = env('DANCES_DONE_18_19');
         $url = 'https://sheets.googleapis.com/v4/spreadsheets/'.
@@ -54,12 +31,10 @@ class DatabaseSeeder extends Seeder
         array_shift( $payload->values);
         foreach ($payload->values as $row) {
             Caller::create(['code' => $row[0], 'name' => $row[1] ]);
-//            echo($row[0] . ' ' . $row[1].'\r');
-//            var_dump($row);
         }
     }
 
-    protected function getDances()
+    protected function loadDances()
     {
         $apiKey = env('SHEETS_API_KEY');
 

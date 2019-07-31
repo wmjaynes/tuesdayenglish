@@ -17,7 +17,8 @@ class CreateDancesTable extends Migration
             $table->unsignedBigInteger('id');
             $table->primary('id');
             $table->string('name');
-            $table->timestamps();
+
+            $table->unique(['name']);
         });
     }
 

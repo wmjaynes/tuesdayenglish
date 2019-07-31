@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Dance;
 use App\DatabaseHelper;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Log;
@@ -18,10 +19,23 @@ use function var_dump;
 
 class DancesController extends Controller
 {
+    public function dances(Request $request)
+    {
+        $date = Carbon::today()->addMonths(-12);
+
+        $query = Dance::has('callers')->with('callers');
+        $sql = $query->toSql();
+        Log::debug('Dance: '.$sql);
+
+        $dances = $query->get();
+
+        return response()->json($dances);
+    }
+
     public function dancesByDate(Request $request)
     {
         $date = Carbon::today()->addMonths(-12);
-        $query =  DB::table('dances')
+        $query = DB::table('dances')
             ->join('caller_dance', 'caller_dance.dance_id', '=', 'dances.id')
             ->join('callers', 'caller_dance.caller_id', '=', 'callers.id')
             ->whereDate('caller_dance.date_of', '>', $date)
@@ -42,7 +56,7 @@ class DancesController extends Controller
             array_push($byDate[$currentDate], $dc);
         }
 
-        $query =  DB::table('dances')
+        $query = DB::table('dances')
             ->join('caller_dance', 'caller_dance.dance_id', '=', 'dances.id')
             ->join('callers', 'caller_dance.caller_id', '=', 'callers.id')
             ->whereDate('caller_dance.date_of', '>', $date)

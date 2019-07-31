@@ -20,6 +20,7 @@ window.Vue = require('vue');
 // files.keys().map(key => Vue.component(key.split('/').pop().split('.')[0], files(key).default));
 
 Vue.component('dances-by-date', require('./components/DancesByDate.vue').default);
+Vue.component('dances-history', require('./components/DancesHistory.vue').default);
 
 /**
  * Next, we will create a fresh Vue application instance and attach it to

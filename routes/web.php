@@ -14,11 +14,15 @@
 Route::get('/', function () {
     return view('home');
 });
+Route::get('/dancesHistory', function () {
+    return view('dancesHistory');
+})->name('dancesHistory');
 
 
 Auth::routes();
 
 Route::get('/home', 'HomeController@index')->name('home');
 Route::get('/reload', 'DancesController@reloadDatabase')->name('reload');
+Route::get('/dances', 'DancesController@dances')->name('dances');
 
 Route::get('/dancesbydate', 'DancesController@dancesByDate');

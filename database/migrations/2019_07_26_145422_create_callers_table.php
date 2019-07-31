@@ -18,7 +18,6 @@ class CreateCallersTable extends Migration
             $table->primary('id');
             $table->string('code')->unique();
             $table->string('name');
-            $table->timestamps();
         });
     }
 

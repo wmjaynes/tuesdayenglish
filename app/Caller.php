@@ -6,6 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class Caller extends Model
 {
+    public $timestamps = false;
     protected $fillable = ['code', 'name'];
 
     public function dances()

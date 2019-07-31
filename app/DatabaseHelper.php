@@ -3,6 +3,7 @@
 namespace App;
 
 
+use Illuminate\Support\Facades\Schema;
 use function array_shift;
 use Carbon\Carbon;
 use function count;
@@ -24,11 +25,11 @@ class DatabaseHelper
         DB::table('callers')->truncate();
         DB::table('dances')->truncate();
 
-        $this->getCallers();
-        $this->getDances();
+        $this->loadCallers();
+        $this->loadDances();
     }
 
-    protected function getCallers() {
+    protected function loadCallers() {
         $apiKey = env('SHEETS_API_KEY');
         $sheet_18_19 = env('DANCES_DONE_18_19');
         $url = 'https://sheets.googleapis.com/v4/spreadsheets/'.
@@ -43,7 +44,7 @@ class DatabaseHelper
         }
     }
 
-    protected function getDances()
+    protected function loadDances()
     {
         $apiKey = env('SHEETS_API_KEY');
 
