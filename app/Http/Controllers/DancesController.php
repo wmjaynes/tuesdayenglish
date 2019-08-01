@@ -19,13 +19,23 @@ use function var_dump;
 
 class DancesController extends Controller
 {
+
+    public function dance(Dance $dance)
+    {
+        $dancesHasCallers = Dance::has('callers')->with('callers')->get();
+        return response()->json($dancesHasCallers);
+
+        $dance->callers;
+        return response()->json($dance);
+    }
+
     public function dances(Request $request)
     {
         $date = Carbon::today()->addMonths(-12);
 
         $query = Dance::has('callers')->with('callers');
         $sql = $query->toSql();
-        Log::debug('Dance: '.$sql);
+        Log::debug('Dance: ' . $sql);
 
         $dances = $query->get();
 
@@ -40,10 +50,11 @@ class DancesController extends Controller
             ->join('callers', 'caller_dance.caller_id', '=', 'callers.id')
             ->whereDate('caller_dance.date_of', '>', $date)
             ->orderBy('caller_dance.date_of', 'desc')
-            ->select('dances.name as dance_name', 'caller_dance.date_of', 'callers.name as caller_name');
+            ->select('dances.name as dance_name', 'caller_dance.date_of',
+                'callers.name as caller_name', 'dances.id as dance_id');
 
         $sql = $query->toSql();
-        Log::debug($sql);
+//        Log::debug($sql);
         $dances_callers = $query->get();
 
         // Group dance/callers by date
@@ -56,6 +67,7 @@ class DancesController extends Controller
             array_push($byDate[$currentDate], $dc);
         }
 
+        // Get number of times dance has been called in the time frame
         $query = DB::table('dances')
             ->join('caller_dance', 'caller_dance.dance_id', '=', 'dances.id')
             ->join('callers', 'caller_dance.caller_id', '=', 'callers.id')
@@ -69,7 +81,13 @@ class DancesController extends Controller
             $dance_count[$dc->dance_name] = $dc->cnt;
         }
 
-        return response()->json(['danceCount' => $dance_count, 'byDate' => $byDate]);
+        $dancesHasCallers = Dance::has('callers')->with('callers')->get();
+        foreach ($dancesHasCallers as $dance) {
+            $dance->displayHistory = false;
+            $dances[$dance->name] = $dance;
+        }
+
+        return response()->json(['danceCount' => $dance_count, 'byDate' => $byDate, 'dances' => $dances]);
     }
 
     public function reloadDatabase()

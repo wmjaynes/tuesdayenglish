@@ -24,5 +24,6 @@ Auth::routes();
 Route::get('/home', 'HomeController@index')->name('home');
 Route::get('/reload', 'DancesController@reloadDatabase')->name('reload');
 Route::get('/dances', 'DancesController@dances')->name('dances');
+Route::get('/dance/{dance}', 'DancesController@dance')->name('dance');
 
 Route::get('/dancesbydate', 'DancesController@dancesByDate');

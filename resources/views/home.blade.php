@@ -9,6 +9,12 @@
                 <div class="card text-danger lead">
                     This site is very much a work in progress and may not always be available and working properly.
                     Currently it only displays a twelve month window, from today.
+                    <ul>
+                        <li>7/30/2019: Added dance "History" page</li>
+                        <li>8/1/2019: Added dance history dropdown toggle. Click on a dance name below. It shows all
+                            called dates in the database, not just in the last 12 months.
+                        </li>
+                    </ul>
                 </div>
                 <div class="card">
                     <div class="card-header">
