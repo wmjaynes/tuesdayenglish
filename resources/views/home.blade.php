@@ -14,6 +14,10 @@
                         <li>8/1/2019: Added dance history dropdown toggle. Click on a dance name below. It shows all
                             called dates in the database, not just in the last 12 months.
                         </li>
+                        <li>
+                            8/2/2019: On the "History" page, added columns for meter, key,
+                            dance formation, and Barnes location, if in Barnes. Still working on formatting.
+                        </li>
                     </ul>
                 </div>
                 <div class="card">

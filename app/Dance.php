@@ -8,7 +8,7 @@ class Dance extends Model
 {
     public $timestamps = false;
     protected $dateFormat = 'Y-m-d';
-    protected $fillable = ['name'];
+    protected $fillable = ['name', 'meter', 'key', 'formation', 'barnes'];
 
     public function callers() {
         return $this->belongsToMany('App\Caller')->withPivot('date_of')

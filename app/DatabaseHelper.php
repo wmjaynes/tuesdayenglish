@@ -3,19 +3,19 @@
 namespace App;
 
 
-use Illuminate\Support\Facades\Schema;
-use function array_shift;
 use Carbon\Carbon;
+use Illuminate\Support\Facades\DB;
+use function array_shift;
 use function count;
 use function env;
 use function explode;
 use function file_get_contents;
-use Illuminate\Database\Schema\Blueprint;
-use Illuminate\Support\Facades\DB;
 use function json_decode;
 use function sizeof;
 use function strlen;
+use function strpos;
 use function trim;
+use function var_dump;
 
 class DatabaseHelper
 {
@@ -27,18 +27,48 @@ class DatabaseHelper
 
         $this->loadCallers();
         $this->loadDances();
+        $this->addDanceAttributes();
     }
 
-    protected function loadCallers() {
+    public function addDanceAttributes()
+    {
         $apiKey = env('SHEETS_API_KEY');
-        $sheet_18_19 = env('DANCES_DONE_18_19');
-        $url = 'https://sheets.googleapis.com/v4/spreadsheets/'.
-            $sheet_18_19.'/values/Leaders?key='.$apiKey;
+        $sheet_dances = env('DANCES');
+        $url = 'https://sheets.googleapis.com/v4/spreadsheets/' .
+            $sheet_dances . '/values/Dances?key=' . $apiKey;
         $payload = json_decode(file_get_contents($url));
 
-        array_shift( $payload->values);
+        array_shift($payload->values);
         foreach ($payload->values as $row) {
-            Caller::create(['code' => $row[0], 'name' => $row[1] ]);
+            $dance = Dance::where('name', 'LIKE', "{$row[0]}%")->first();
+            if (strpos($row[0], 'Spring') === 0) {
+                var_dump($row);
+                var_dump($dance);
+            }
+            if ($dance != null) {
+                $dance->meter = $row[2];
+                $dance->key = $row[5];
+                $dance->formation = $row[6];
+
+                if (strpos($row[9], 'B') !== false) {
+                    $dance->barnes = $row[9];
+                }
+                $dance->save();
+            }
+        }
+    }
+
+    protected function loadCallers()
+    {
+        $apiKey = env('SHEETS_API_KEY');
+        $sheet_18_19 = env('DANCES_DONE_18_19');
+        $url = 'https://sheets.googleapis.com/v4/spreadsheets/' .
+            $sheet_18_19 . '/values/Leaders?key=' . $apiKey;
+        $payload = json_decode(file_get_contents($url));
+
+        array_shift($payload->values);
+        foreach ($payload->values as $row) {
+            Caller::create(['code' => $row[0], 'name' => $row[1]]);
 //            echo($row[0] . ' ' . $row[1].'\r');
 //            var_dump($row);
         }
@@ -49,13 +79,13 @@ class DatabaseHelper
         $apiKey = env('SHEETS_API_KEY');
 
         $sheetId = env('DANCES_DONE_18_19');
-        $url = 'https://sheets.googleapis.com/v4/spreadsheets/'.
-            $sheetId.'/values/Master?key='.$apiKey;
+        $url = 'https://sheets.googleapis.com/v4/spreadsheets/' .
+            $sheetId . '/values/Master?key=' . $apiKey;
         $this->readFromSheet($url, 18);
 
         $sheetId = env('DANCES_DONE_17_18');
-        $url = 'https://sheets.googleapis.com/v4/spreadsheets/'.
-            $sheetId.'/values/Master?key='.$apiKey;
+        $url = 'https://sheets.googleapis.com/v4/spreadsheets/' .
+            $sheetId . '/values/Master?key=' . $apiKey;
         $this->readFromSheet($url, 17);
 
     }
@@ -64,7 +94,7 @@ class DatabaseHelper
     {
         $payload = json_decode(file_get_contents($url));
 
-        array_shift( $payload->values);
+        array_shift($payload->values);
         $total = 0;
         foreach ($payload->values as $row) {
 //            print "::".print_r($row, true)."\n";

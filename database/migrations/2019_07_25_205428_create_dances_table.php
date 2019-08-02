@@ -17,6 +17,10 @@ class CreateDancesTable extends Migration
             $table->unsignedBigInteger('id');
             $table->primary('id');
             $table->string('name');
+            $table->string('meter')->nullable();
+            $table->string('key')->nullable();
+            $table->string('formation')->nullable();
+            $table->string('barnes')->nullable();
 
             $table->unique(['name']);
         });
