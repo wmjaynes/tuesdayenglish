@@ -5,7 +5,7 @@
 
 
         <div class="row justify-content-center">
-            <div class="col-md-8">
+            <div class="col-lg-12">
                 <div class="card text-danger lead">
                     This site is very much a work in progress and may not always be available and working properly.
                     Currently it only displays a twelve month window, from today.
@@ -18,16 +18,22 @@
                             8/2/2019: On the "History" page, added columns for meter, key,
                             dance formation, and Barnes location, if in Barnes. Still working on formatting.
                         </li>
+                        <li>
+                            8/8/2019: On the "History" page, can specify number of past months to include,
+                            both for the dances and their history.
+                        </li>
                     </ul>
                 </div>
                 <div class="card">
                     <div class="card-header">
                         <h5 class="card-title">AACTMAD Tuesday English Country Dance</h5>
-                        <h6 class="card-title">Dances Done</h6>
+                        <h6 class="card-title">Dances programs from the past 12 months</h6>
                     </div>
                     <div>
                         The number on the right is the number of times the dance has been called in the time period
                         displayed.
+                        <br>
+                        Click on the dance name to see a history of when it has been called and by whom.
                     </div>
                     <div class="card-body">
                         <dances-by-date></dances-by-date>

@@ -7,7 +7,7 @@
                 {{ (new Date(index)).toLocaleDateString("en-US", date_options) }}
             </div>
             <div class="card-body">
-                <table class="table table-sm  table-bordered">
+                <table class="table table-sm  table-bordered table-striped">
                     <tbody>
                     <tr v-for="(dance, index) in date">
                         <td class="w-50 dance-name" v-on:click='toggleHistory(dance.dance_name)'>

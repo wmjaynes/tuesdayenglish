@@ -41,10 +41,7 @@ class DatabaseHelper
         array_shift($payload->values);
         foreach ($payload->values as $row) {
             $dance = Dance::where('name', 'LIKE', "{$row[0]}%")->first();
-            if (strpos($row[0], 'Spring') === 0) {
-                var_dump($row);
-                var_dump($dance);
-            }
+
             if ($dance != null) {
                 $dance->meter = $row[2];
                 $dance->key = $row[5];

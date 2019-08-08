@@ -1,6 +1,9 @@
 <template>
 
     <div>
+        Dances done in the last <input type="text" size="2" v-model="danceRange" @blur="getDanceRecords"> month(s);
+        <br>
+        Dance history for the last <input type="text" size="2" v-model="historyRange"  @blur="getDanceRecords"> month(s);
         <form class="form-inline">
             <input class="form-control"
                    placeholder="Quick search on dance name"
@@ -44,6 +47,8 @@
                 danceRecords: [],
                 date_options: {weekday: 'long', year: 'numeric', month: 'short', day: 'numeric'},
                 quickSearchQuery: '',
+                danceRange: 3,
+                historyRange: 12,
             }
         },
 
@@ -53,7 +58,7 @@
             },
             getDanceRecords() {
                 let app = this;
-                axios.get('/dances')
+                axios.get('/dances'+'?danceRange='+this.danceRange+'&historyRange='+this.historyRange)
                     .then(function (resp) {
                         console.log(resp.data);
 
