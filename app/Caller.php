@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 class Caller extends Model
 {
     public $timestamps = false;
+    protected $dateFormat = 'Y-m-d';
     protected $fillable = ['code', 'name'];
 
     public function dances()

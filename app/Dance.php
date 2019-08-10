@@ -10,7 +10,8 @@ class Dance extends Model
     protected $dateFormat = 'Y-m-d';
     protected $fillable = ['name', 'meter', 'key', 'formation', 'barnes'];
 
-    public function callers() {
+    public function callers()
+    {
         return $this->belongsToMany('App\Caller')->withPivot('date_of')
             ->orderBy('date_of','desc');
     }

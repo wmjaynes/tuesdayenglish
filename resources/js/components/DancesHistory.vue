@@ -1,17 +1,21 @@
 <template>
 
     <div>
-        Dances done in the last <input type="text" size="2" v-model="danceRange" @blur="getDanceRecords"> month(s);
-        <br>
-        Dance history for the last <input type="text" size="2" v-model="historyRange"  @blur="getDanceRecords"> month(s);
-        <form class="form-inline">
-            <input class="form-control"
-                   placeholder="Quick search on dance name"
-                   size="40"
-                   type="text"
-                   v-model="quickSearchQuery">
-            <button @click.prevent="clearQuickSearch();" class="btn btn-secondary">Clear</button>
-        </form>
+        <div class="pl-0">
+            Dances done in the last
+            <input @blur="getDanceRecords" size="2" type="text" v-model="danceRange">
+            month(s); <br> Dance history for the last
+            <input @blur="getDanceRecords" size="2" type="text" v-model="historyRange">
+            month(s);
+            <form class="form-inline">
+                <input class="form-control"
+                       placeholder="Quick search on dance name"
+                       size="40"
+                       type="text"
+                       v-model="quickSearchQuery">
+                <button @click.prevent="clearQuickSearch();" class="btn btn-secondary">Clear</button>
+            </form>
+        </div>
 
         <ul class="list-group">
             <li class="list-group-item  top-list-group" v-for="dance in filteredRecords">
@@ -26,7 +30,7 @@
                     <li class="list-group-item  border-0">{{ dance.barnes }}</li>
                 </ul>
                 <ul class="list-group">
-                    <li class="list-group-item" v-for="caller in dance.callers">
+                    <li class="list-group-item list-group-history-item" v-for="caller in dance.callers">
                         {{ (new Date(caller.pivot.date_of)).toLocaleDateString("en-US", date_options) }} :
                         {{caller.name}}
                     </li>
@@ -58,9 +62,9 @@
             },
             getDanceRecords() {
                 let app = this;
-                axios.get('/dances'+'?danceRange='+this.danceRange+'&historyRange='+this.historyRange)
+                axios.get('/dances' + '?danceRange=' + this.danceRange + '&historyRange=' + this.historyRange)
                     .then(function (resp) {
-                        console.log(resp.data);
+                        // console.log(resp.data);
 
                         app.danceRecords = resp.data;
                     })
@@ -91,6 +95,11 @@
 </script>
 
 <style scoped>
+
+    .list-group-history-item {
+        padding: 0rem 2rem;
+    }
+
     .top-list-group {
         padding-left: 0;
     }

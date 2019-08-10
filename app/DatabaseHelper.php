@@ -11,6 +11,7 @@ use function env;
 use function explode;
 use function file_get_contents;
 use function json_decode;
+use function now;
 use function sizeof;
 use function strlen;
 use function strpos;
@@ -28,6 +29,11 @@ class DatabaseHelper
         $this->loadCallers();
         $this->loadDances();
         $this->addDanceAttributes();
+
+        DB::table('application')
+            ->updateOrInsert(
+                ['id' => 1],
+                ['last_reloaded_at' => Carbon::now('+00:00')]);
     }
 
     public function addDanceAttributes()
@@ -53,6 +59,24 @@ class DatabaseHelper
                 $dance->save();
             }
         }
+    }
+
+    public function test()
+    {
+        $apiKey = env('SHEETS_API_KEY');
+        $most_recent = env('MOST_RECENT_DANCES_DONE');
+        $url = 'https://www.googleapis.com/drive/v2/files/' .
+            $most_recent . '/?key=' . $apiKey;
+        $payload = json_decode(file_get_contents($url));
+
+        $dateStr = $payload->modifiedDate;
+        $carbDate = new Carbon($dateStr);
+        $now = Carbon::now();
+        dump($carbDate->toIso8601ZuluString());
+        dump($carbDate->addMinutes(10)->toIso8601ZuluString());
+        dump($now->toIso8601ZuluString());
+        echo $now->toIso8601ZuluString();
+        var_dump( $carbDate->greaterThan($now));
     }
 
     protected function loadCallers()

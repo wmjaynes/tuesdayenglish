@@ -5,7 +5,7 @@
 
 
         <div class="row justify-content-center">
-            <div class="col-md-8">
+            <div class="col-lg-12">
                 <div class="card text-danger lead">
                     This site is very much a work in progress and may not always be available and working properly. <br>
                     I haven't decided on exact formating of this page. Suggestions are welcome.

@@ -2,24 +2,16 @@
 
 namespace App\Http\Controllers;
 
+use App\Caller;
 use App\Dance;
 use App\DatabaseHelper;
 use Carbon\Carbon;
-use Illuminate\Support\Facades\Event;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
-use PhpParser\Builder;
 use function array_key_exists;
 use function array_push;
-use function dump;
-use function explode;
-use Illuminate\Http\Request;
-use Illuminate\Support\Arr;
-use Illuminate\Support\Facades\DB;
-use phpDocumentor\Reflection\Types\Array_;
-use function print_r;
 use function response;
-use function today;
-use function var_dump;
 
 class DancesController extends Controller
 {
@@ -27,42 +19,16 @@ class DancesController extends Controller
     public function dance()
     {
         $date = Carbon::today()->addMonths(-2);
-//        Event::listen('illuminate.query', function($query)
-//        {
-//            Log::debug(print_r($query, true));
-//        });
-//        \DB::listen(function($sql) {
-//            var_dump($sql);
-//        });
 
         \DB::enableQueryLog();
 
-        $dancesHasCallers = Dance::whereHas('callers', function ($query) {
-            $query->where('date_of', '>', '2019-08-02');
-        })->with(['callers' => function ($query)  {
-            $query->where('date_of', '>', '2019-02-02');
-        }])->get();
+        $return = Caller::has('dances')->with('dances')->get();
 
-        dd(\DB::getQueryLog());
+//        dump(\DB::getQueryLog());
 
 
-        $exists = "select * from callers inner join caller_dance on callers.id = caller_dance.caller_id where dances.id = caller_dance.dance_id and caller_dance.date_of > '2019-07-01)'";
 
-        $dancesHasCallers = Dance::whereExists(function ($query) {
-            $date = Carbon::today()->addMonths(-2);
-            $query->select(DB::raw(1))
-                ->from('callers')
-                ->join('caller_dance', 'callers.id', '=', 'caller_dance.caller_id')
-                ->where('dances.id', '=', 'caller_dance.dance_id')
-                ->whereDate('caller_dance.date_of', '>', $date);
-        })
-            ->get();
-        dump(\DB::getQueryLog());
-
-        return response()->json($dancesHasCallers);
-
-        $dance->callers;
-        return response()->json($dance);
+        return response()->json($return);
     }
 
     public function dances(Request $request)
