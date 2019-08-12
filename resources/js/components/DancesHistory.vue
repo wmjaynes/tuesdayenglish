@@ -17,26 +17,21 @@
             </form>
         </div>
 
-        <ul class="list-group">
-            <li class="list-group-item  top-list-group" v-for="dance in filteredRecords">
-
-                <ul class="list-group list-group-horizontal bg-light">
-                    <li class="list-group-item w-50 border-0">
-                        <span class="font-weight-bold">{{dance.name}}</span>
-                    </li>
-                    <li class="list-group-item  border-0">{{ dance.meter }}</li>
-                    <li class="list-group-item  border-0">{{ dance.key }}</li>
-                    <li class="list-group-item  border-0">{{ dance.formation }}</li>
-                    <li class="list-group-item  border-0">{{ dance.barnes }}</li>
-                </ul>
-                <ul class="list-group">
-                    <li class="list-group-item list-group-history-item" v-for="caller in dance.callers">
-                        {{ (new Date(caller.pivot.date_of)).toLocaleDateString("en-US", date_options) }} :
-                        {{caller.name}}
-                    </li>
-                </ul>
-            </li>
-        </ul>
+        <div v-for="dance in filteredRecords">
+            <div class="row border-top dance-name">
+                <div class="col-12 col-md-5 font-weight-bold">{{dance.name}}</div>
+                <div class="col-3 col-md-2">{{ dance.meter }}</div>
+                <div class="col-3 col-md-2">{{ dance.key }}</div>
+                <div class="col-3 col-md-1">{{ dance.formation }}</div>
+                <div class="col-3 col-md-2">{{ dance.barnes }}</div>
+            </div>
+            <div class="row" v-for="caller in dance.callers">
+                <div class="col-1">&nbsp;</div>
+                <div class="col-11">
+                    {{ (new Date(caller.pivot.date_of)).toLocaleDateString("en-US", date_options) }} : {{caller.name}}
+                </div>
+            </div>
+        </div>
 
     </div>
 
@@ -96,15 +91,7 @@
 
 <style scoped>
 
-    .list-group-history-item {
-        padding: 0rem 2rem;
-    }
-
-    .top-list-group {
-        padding-left: 0;
-    }
-
-    .list-group-horizontal .list-group-item {
+    .dance-name {
         background-color: #e9ecef;
     }
 

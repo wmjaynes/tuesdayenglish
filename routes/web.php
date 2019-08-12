@@ -29,3 +29,7 @@ Route::get('/dancesbydate', 'DancesController@dancesByDate');
 
 Route::get('/reload', 'ReloadController@reloadDatabase')->name('reload');
 Route::get('/doupdatequery', 'ReloadController@doUpdateQuery')->name('doupdatequery');
+
+Route::get('/test/', function () {
+    return view('test');
+});
