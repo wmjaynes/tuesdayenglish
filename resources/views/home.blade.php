@@ -24,7 +24,7 @@
                         <br>
                         Click on the dance name to see a complete history of when it has been called and by whom.
                     </div>
-                    <div class="card-body">
+                    <div class="card-body" style="padding-left: 0.25rem; padding-right: 0.25rem">
                         <dances-by-date></dances-by-date>
 
                     </div>
