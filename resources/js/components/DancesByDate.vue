@@ -33,8 +33,8 @@
                     </div>
                     <template v-if="dances[dance.dance_name].displayHistory">
                         <div class="row border-left" v-for="caller in dances[dance.dance_name].callers">
-                            <div class="col-6 col-md-3 col-lg-2 pl-4 border-left">
-                                {{ (new Date(caller.pivot.date_of)).toLocaleDateString("en-US", date_options_short) }}
+                            <div class="col-6 col-md-3 col-lg-2 pl-4 border-left" >
+                                <a :href="programLink(caller)">{{ date_string_short(caller) }}</a>
                             </div>
                             <div class="col">
                                 {{caller.name}}
@@ -60,12 +60,21 @@
                 dances: [],
                 date_options_long: {weekday: 'long', year: 'numeric', month: 'long', day: 'numeric'},
                 date_options_short: {weekday: 'short', year: 'numeric', month: 'short', day: 'numeric'},
+                date_options_numeric: {year: 'numeric', month: '2-digit', day: '2-digit'},
                 doReload: false,
                 reloading: false,
             }
         },
 
         methods: {
+            programLink(caller) {
+                let dt = (new Date(caller.pivot.date_of)).toLocaleDateString("en-US", this.date_options_numeric);
+                return '/program?date=' + dt;
+            },
+            date_string_short(caller) {
+              let dt = (new Date(caller.pivot.date_of)).toLocaleDateString("en-US", this.date_options_short);
+              return dt;
+            },
             toggleHistory(danceName) {
                 let dh = this.dances[danceName].displayHistory;
                 this.dances[danceName].displayHistory = !dh;

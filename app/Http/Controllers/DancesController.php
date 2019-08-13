@@ -16,19 +16,20 @@ use function response;
 class DancesController extends Controller
 {
 
-    public function dance()
+    public function program(Request $request, Dance $dance)
     {
-        $date = Carbon::today()->addMonths(-2);
+        $dateStr = $request->date;
+        $danceDate = new Carbon($dateStr);
 
-        \DB::enableQueryLog();
+        $dances = Dance::whereHas('callers', function ($query) use ($danceDate) {
+            $query->where('date_of', '=', $danceDate);
+        })->with(['callers' => function ($query) use ($danceDate) {
+            $query->where('date_of', '=', $danceDate);
+        }])->get();
 
-        $return = Caller::has('dances')->with('dances')->get();
+        return view('program')->with(['dances'=>$dances]);
 
-//        dump(\DB::getQueryLog());
-
-
-
-        return response()->json($return);
+        return response()->json($dances);
     }
 
     public function dances(Request $request)
