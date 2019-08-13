@@ -47,7 +47,7 @@
         data() {
             return {
                 danceRecords: [],
-                date_options: {weekday: 'long', year: 'numeric', month: 'short', day: 'numeric'},
+                date_options: {weekday: 'short', year: 'numeric', month: 'short', day: 'numeric'},
                 quickSearchQuery: '',
                 danceRange: 3,
                 historyRange: 12,
