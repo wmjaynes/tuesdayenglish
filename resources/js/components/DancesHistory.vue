@@ -26,9 +26,12 @@
                 <div class="col-3 col-md-2">{{ dance.barnes }}</div>
             </div>
             <div class="row" v-for="caller in dance.callers">
-                <div class="col-1">&nbsp;</div>
-                <div class="col-11">
-                    {{ (new Date(caller.pivot.date_of)).toLocaleDateString("en-US", date_options) }} : {{caller.name}}
+                <div class="col-1"></div>
+                <div class="col-6 col-md-3 ">
+                    {{ (new Date(caller.pivot.date_of)).toLocaleDateString("en-US", date_options) }}
+                </div>
+                <div class="col">
+                    {{caller.name}}
                 </div>
             </div>
         </div>

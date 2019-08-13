@@ -4,30 +4,44 @@
         <div class="alert alert-danger" v-if="reloading">
             The dance database needs to be reloaded. This should take less than a minute...
             <div class="progress">
-                <div class="progress-bar progress-bar-striped bg-danger progress-bar-animated"
-                     role="progressbar" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100"
+                <div aria-valuemax="100"
+                     aria-valuemin="0"
+                     aria-valuenow="100"
+                     class="progress-bar progress-bar-striped bg-danger progress-bar-animated"
+                     role="progressbar"
                      style="width: 100%"></div>
             </div>
         </div>
 
         <div class="card" v-for="(date, index) in this.byDate">
-            <div class="card-header">
-                {{ (new Date(index)).toLocaleDateString("en-US", date_options) }}
+            <div class="card-header font-weight-bold">
+                {{ (new Date(index)).toLocaleDateString("en-US", date_options_long) }}
             </div>
             <div class="card-body">
-                <table class="table table-sm  table-bordered table-striped">
-                    <tbody>
-                    <tr v-for="(dance, index) in date">
-                        <td class="w-50 dance-name" v-on:click='toggleHistory(dance.dance_name)'>
+
+                <template class="my-row" v-for="(dance, index) in date">
+                    <div class="row border-left">
+                        <div class="col col-lg-3 dance-name" v-on:click='toggleHistory(dance.dance_name)'>
                             {{dance.dance_name}}
-                            <dance-history :dance="dances[dance.dance_name]"
-                                           v-if="dances[dance.dance_name].displayHistory"></dance-history>
-                        </td>
-                        <td class="w-50">{{dance.caller_name}}</td>
-                        <td>{{danceCount[dance.dance_name]}}</td>
-                    </tr>
-                    </tbody>
-                </table>
+                        </div>
+                        <div class="col col-lg-3">
+                            {{dance.caller_name}}
+                        </div>
+                        <div class="col-1">
+                            {{danceCount[dance.dance_name]}}
+                        </div>
+                    </div>
+                    <template v-if="dances[dance.dance_name].displayHistory">
+                        <div class="row border-left" v-for="caller in dances[dance.dance_name].callers">
+                            <div class="col-6 col-md-3 col-lg-2 pl-4 border-left">
+                                {{ (new Date(caller.pivot.date_of)).toLocaleDateString("en-US", date_options_short) }}
+                            </div>
+                            <div class="col">
+                                {{caller.name}}
+                            </div>
+                        </div>
+                    </template>
+                </template>
             </div>
         </div>
 
@@ -44,7 +58,8 @@
                 danceCount: [],
                 byDate: [],
                 dances: [],
-                date_options: {weekday: 'long', year: 'numeric', month: 'long', day: 'numeric'},
+                date_options_long: {weekday: 'long', year: 'numeric', month: 'long', day: 'numeric'},
+                date_options_short: {weekday: 'short', year: 'numeric', month: 'short', day: 'numeric'},
                 doReload: false,
                 reloading: false,
             }
@@ -54,7 +69,7 @@
             toggleHistory(danceName) {
                 let dh = this.dances[danceName].displayHistory;
                 this.dances[danceName].displayHistory = !dh;
-                // console.log("displayHistory: " + this.dances[danceName].displayHistory);
+                console.log("displayHistory: " + this.dances[danceName].displayHistory);
             },
             getDanceRecords() {
                 let app = this;
@@ -118,6 +133,10 @@
 </script>
 
 <style scoped>
+    .row:nth-child(odd) {
+        background-color: rgba(0, 0, 0, 0.03);
+    }
+
     .dance-name {
         cursor: pointer;
     }
