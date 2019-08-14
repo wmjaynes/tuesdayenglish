@@ -5,6 +5,7 @@ namespace App;
 
 use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 use function array_shift;
 use function count;
 use function env;
@@ -46,15 +47,23 @@ class DatabaseHelper
 
         array_shift($payload->values);
         foreach ($payload->values as $row) {
-            $dance = Dance::where('name', 'LIKE', "{$row[0]}%")->first();
+
+            if (count($row) == 0) {
+                break;
+            }
+            $dance = Dance::where('name', 'LIKE', "{$row[5]}%")->first();
+
+//            if ($dance == null) {
+//                Log::debug('Dance not found: '.$row[5]);
+//            }
 
             if ($dance != null) {
-                $dance->meter = $row[2];
-                $dance->key = $row[5];
-                $dance->formation = $row[6];
+                $dance->meter = $row[7];
+                $dance->key = $row[10];
+                $dance->formation = $row[11];
 
-                if (strpos($row[9], 'B') !== false) {
-                    $dance->barnes = $row[9];
+                if (strpos($row[14], 'B') !== false) {
+                    $dance->barnes = $row[14];
                 }
                 $dance->save();
             }
