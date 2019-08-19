@@ -22,6 +22,7 @@ window.Vue = require('vue');
 Vue.component('dances-by-date', require('./components/DancesByDate.vue').default);
 Vue.component('dances-history', require('./components/DancesHistory.vue').default);
 Vue.component('dance-history', require('./components/DanceHistory.vue').default);
+Vue.component('callers-history', require('./components/CallersHistory.vue').default);
 
 /**
  * Next, we will create a fresh Vue application instance and attach it to

@@ -17,6 +17,9 @@ Route::get('/', function () {
 Route::get('/dancesHistory', function () {
     return view('dancesHistory');
 })->name('dancesHistory');
+Route::get('/callersHistory', function () {
+    return view('callersHistory');
+})->name('callersHistory');
 
 
 Auth::routes();
@@ -33,3 +36,5 @@ Route::get('/doupdatequery', 'ReloadController@doUpdateQuery')->name('doupdatequ
 Route::get('/test/', function () {
     return view('test');
 });
+
+Route::get('/callers', 'CallersController@dances')->name('dances');
