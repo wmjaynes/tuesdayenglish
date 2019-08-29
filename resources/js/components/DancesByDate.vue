@@ -129,8 +129,8 @@
             },
 
             async doMounted() {
-                await this.checkOnSource();
-                await this.reloadDatabase();
+                // await this.checkOnSource();
+                // await this.reloadDatabase();
                 this.getDanceRecords();
             }
         },

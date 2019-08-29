@@ -13,6 +13,7 @@ use function explode;
 use function file_get_contents;
 use function json_decode;
 use function now;
+use function preg_replace;
 use function sizeof;
 use function strlen;
 use function strpos;
@@ -51,11 +52,13 @@ class DatabaseHelper
             if (count($row) == 0) {
                 break;
             }
-            $dance = Dance::where('name', 'LIKE', "{$row[5]}%")->first();
+            $danceNamePattern = preg_replace('/[^a-zA-Z]+/', '%', $row[5]);
+//            Log::debug('Dance name pattern: '.$danceNamePattern);
+            $dance = Dance::where('name', 'LIKE', "{$danceNamePattern}%")->first();
 
-//            if ($dance == null) {
-//                Log::debug('Dance not found: '.$row[5]);
-//            }
+            if ($dance == null) {
+                Log::debug('Dance not found: '.$row[5]);
+            }
 
             if ($dance != null) {
                 $dance->meter = $row[7];
@@ -107,6 +110,11 @@ class DatabaseHelper
     protected function loadDances()
     {
         $apiKey = env('SHEETS_API_KEY');
+
+        $sheetId = env('DANCES_DONE_19_20');
+        $url = 'https://sheets.googleapis.com/v4/spreadsheets/' .
+            $sheetId . '/values/Master?key=' . $apiKey;
+        $this->readFromSheet($url, 19);
 
         $sheetId = env('DANCES_DONE_18_19');
         $url = 'https://sheets.googleapis.com/v4/spreadsheets/' .

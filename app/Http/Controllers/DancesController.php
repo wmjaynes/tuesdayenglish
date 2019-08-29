@@ -39,7 +39,7 @@ class DancesController extends Controller
         $historyMonths = $request->input('historyRange', 12);
         $historyDate = Carbon::today()->addMonths(-$historyMonths);
 
-        Log::debug($danceDate->toDateString());
+//        Log::debug($danceDate->toDateString());
 
         $dances = Dance::whereHas('callers', function ($query) use ($danceDate) {
             $query->where('date_of', '>', $danceDate);
