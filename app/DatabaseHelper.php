@@ -17,11 +17,14 @@ use function preg_replace;
 use function sizeof;
 use function strlen;
 use function strpos;
+use function strtolower;
 use function trim;
 use function var_dump;
 
 class DatabaseHelper
 {
+
+
     public function reloadDatabase()
     {
         DB::table('caller_dance')->truncate();
@@ -29,8 +32,8 @@ class DatabaseHelper
         DB::table('dances')->truncate();
 
         $this->loadCallers();
+        $this->loadDancesAndAttributes();
         $this->loadDances();
-        $this->addDanceAttributes();
 
         DB::table('application')
             ->updateOrInsert(
@@ -38,7 +41,7 @@ class DatabaseHelper
                 ['last_reloaded_at' => Carbon::now('+00:00')]);
     }
 
-    public function addDanceAttributes()
+    public function loadDancesAndAttributes()
     {
         $apiKey = env('SHEETS_API_KEY');
         $sheet_dances = env('DANCES');
@@ -52,13 +55,11 @@ class DatabaseHelper
             if (count($row) == 0) {
                 break;
             }
-            $danceNamePattern = preg_replace('/[^a-zA-Z]+/', '%', $row[5]);
-//            Log::debug('Dance name pattern: '.$danceNamePattern);
-            $dance = Dance::where('name', 'LIKE', "{$danceNamePattern}%")->first();
+//            $danceNamePattern = preg_replace('/[^a-zA-Z]+/', '%', $row[5]);
+//            $dance = Dance::where('name', 'LIKE', "{$danceNamePattern}%")->first();
 
-            if ($dance == null) {
-                Log::debug('Dance not found: '.$row[5]);
-            }
+            $dance = Dance::create(['name' => trim($row[5])]);
+
 
             if ($dance != null) {
                 $dance->meter = $row[7];
@@ -94,7 +95,7 @@ class DatabaseHelper
     protected function loadCallers()
     {
         $apiKey = env('SHEETS_API_KEY');
-        $sheet_18_19 = env('DANCES_DONE_18_19');
+        $sheet_18_19 = env('DANCES_DONE_19_20');
         $url = 'https://sheets.googleapis.com/v4/spreadsheets/' .
             $sheet_18_19 . '/values/Leaders?key=' . $apiKey;
         $payload = json_decode(file_get_contents($url));
@@ -128,6 +129,54 @@ class DatabaseHelper
 
     }
 
+    private $convertName = array(
+        '1 is One and All Alone' => 'One Is One and All Alone',
+        '4 for the Gospelmakers' => 'Four for the Gospelmakers',
+        '5 for the Symbol at Your Door' => 'Five for the Symbol at Your Door',
+        '6 for the Six Proud Walkers' => 'Six for the Six Proud Walkers',
+        '7 for the Seven Stars in the Sky' => 'Seven for the Seven Stars in the Sky',
+        '8 for the Music Makers' => 'Eight for the Music Makers',
+        '9 for the Nine Bright Shiners' => 'Nine for the Nine Bright Shiners',
+        '10 for the Ten Commandments' => 'Ten for the Ten Commandments',
+        '12 for the Twelve Apostles' => 'Twelve for the Twelve Apostles',
+        'Maid\'s Morris' => 'Maids Morris',
+        'Haymakers, The / Highland Lilt' => 'Haymakers, The',
+        'Anna Maria / Maria Anna, The' => 'Anna Maria',
+        'Bemused Benthologist ' => 'Bemused Benthologist, The ',
+        'Bellamira (Bolton)' => 'Bellamira',
+        'Blackheath (Kalia Kliban recon.)' => 'Blackheath',
+        'Chestnut / Dove\'s Figary' => 'Chestnut',
+        'Come, Let\'s Be Merry' => 'Come Let\'s Be Merry',
+        'De\'il Take the Warr' => 'De\'il Take the Wars',
+        'Draper\'s Gardens (Shaw)' => 'Drapers Gardens',
+        'Draper\'s Gardens' => 'Drapers Gardens',
+        'Dublin Bay / We\'ll Wed and We\'ll Bed' => 'Dublin Bay',
+        'Duke of Kent\'s Waltz, The (v I & II)' => 'Duke of Kent\'s Waltz, I, The',
+        'Fit\'s Come on Me Now, The / Bishop of Chester\'s Jigg, The' => 'Bishop of Chester\'s Jigg',
+        'Irfona\'s Waltz' => 'Irfôna\'s Waltz',
+        'Windsor Wedges' => 'Windsor Wenches',
+        'Up with Aily' => 'Up with Aily (3/2)',
+        'Bemused Benthologist' => 'Bemused Benthologist, The',
+        'Knole Park (v. I & II)' => 'Knole Park',
+        'Rakes of Rochester, The (v. I & II)' => 'Rakes of Rochester, The',
+        'Softly, Good Tummas' => 'Softly Good Tummas',
+        'Treasure of the Big Woods, The' => 'Treasure of the Big Woods',
+        'Trip to Tunbridge, A (v I & II)' => 'Trip to Tunbridge, A',
+        'Hen Run' => 'Hen Run, The',
+        'Hey, Boys, Up Go We / Cuckolds all in a Row' => 'Hey, Boys, Up Go We',
+        'Jockey, The / Fourpence Ha\'penny Farthing' => 'Fourpence Ha\'penny Farthing',
+        'King of Poland, The' => 'King of Poland',
+        'Long Odds' => 'Long Odds, The',
+        'Midnight Ramble' => 'Midnight Ramble, The',
+        'Molly Andrew, The' => ' MollyAndrew, The',
+        'Mrs. Pomeroy\'s Pavane / Bridgewater\'s Gain' => 'Mrs. Pomeroy\'s Pavane',
+        'News from Tripoli' => 'News from Tripoly',
+        'Old Hob / Mouse Trap, The' => 'Old Hob or the Mouse Trap',
+        'Old Mill, The / Merry Salopians, The' => 'Merry Salopians, The',
+        'Quite Carr-ied Away / Joan Transported' => 'Quite Carr-ied Away',
+
+    );
+
     protected function readFromSheet($url, $startYear)
     {
         $payload = json_decode(file_get_contents($url));
@@ -135,16 +184,36 @@ class DatabaseHelper
         array_shift($payload->values);
         $total = 0;
         foreach ($payload->values as $row) {
-//            print "::".print_r($row, true)."\n";
-            if (count($row) == 0) {
+//            Log::debug( "::".print_r($row, true));
+            if (sizeof($row) == 0) {
                 break;
             }
-            $dance = Dance::firstOrCreate(['name' => $row[0]]);
-
             if (sizeof($row) == 1)
                 continue;
-            if (ctype_space($row[1] || $row[1] == ''))
+            if ($row[2] == 0)
                 continue;
+
+            // At this point we know the dance has been called at least once
+            // in the spreadsheet, although it may not yet be in the database
+
+            $row[0] = trim($row[0]);
+            if (isset($this->convertName[$row[0]])) {
+                $danceName = $this->convertName[$row[0]];
+//                Log::debug("$danceName : $startYear :: danceName converted");
+            }
+            else {
+                $danceName = $row[0];
+            }
+
+//            $dance = Dance::where('name', 'ilike', $danceName)->get();
+            $dance = Dance::whereRaw('LOWER(name) = ?', strtolower($danceName))->get();
+            if ($dance->isEmpty()) {
+                Log::debug("$danceName : $startYear :: dance not found");
+//                continue;
+            }
+
+            $dance = Dance::firstOrCreate(['name' => $danceName]);
+
             $dc = explode(', ', $row[1]);
             if (strlen(trim($dc[0])) == 0)
                 continue;
