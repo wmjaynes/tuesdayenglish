@@ -112,20 +112,12 @@ class DatabaseHelper
     {
         $apiKey = env('SHEETS_API_KEY');
 
-        $sheetId = env('DANCES_DONE_19_20');
-        $url = 'https://sheets.googleapis.com/v4/spreadsheets/' .
-            $sheetId . '/values/Master?key=' . $apiKey;
-        $this->readFromSheet($url, 19);
-
-        $sheetId = env('DANCES_DONE_18_19');
-        $url = 'https://sheets.googleapis.com/v4/spreadsheets/' .
-            $sheetId . '/values/Master?key=' . $apiKey;
-        $this->readFromSheet($url, 18);
-
-        $sheetId = env('DANCES_DONE_17_18');
-        $url = 'https://sheets.googleapis.com/v4/spreadsheets/' .
-            $sheetId . '/values/Master?key=' . $apiKey;
-        $this->readFromSheet($url, 17);
+        $this->readFromSheet($apiKey, 'DANCES_DONE_19_20',19);
+        $this->readFromSheet($apiKey, 'DANCES_DONE_18_19',18);
+        $this->readFromSheet($apiKey, 'DANCES_DONE_17_18',17);
+        $this->readFromSheet($apiKey, 'DANCES_DONE_16_17',16);
+        $this->readFromSheet($apiKey, 'DANCES_DONE_15_16',15);
+        $this->readFromSheet($apiKey, 'DANCES_DONE_14_15',14);
 
     }
 
@@ -168,17 +160,59 @@ class DatabaseHelper
         'King of Poland, The' => 'King of Poland',
         'Long Odds' => 'Long Odds, The',
         'Midnight Ramble' => 'Midnight Ramble, The',
-        'Molly Andrew, The' => ' MollyAndrew, The',
+        'Molly Andrew, The' => 'MollyAndrew, The',
         'Mrs. Pomeroy\'s Pavane / Bridgewater\'s Gain' => 'Mrs. Pomeroy\'s Pavane',
         'News from Tripoli' => 'News from Tripoly',
-        'Old Hob / Mouse Trap, The' => 'Old Hob or the Mouse Trap',
+        'News From Tripoli' => 'News from Tripoly',
+        'Old Hob / Mouse Trap, The' => 'Old Hob, or the Mouse Trap',
         'Old Mill, The / Merry Salopians, The' => 'Merry Salopians, The',
         'Quite Carr-ied Away / Joan Transported' => 'Quite Carr-ied Away',
+        'Dr. Who' => 'Doctor Who',
+        'Waltham Abbey' => 'Waltham Abbey (Roodman)',
+        'Southwind' => 'Southwind (Winston)',
+        'Manches Vertes, Les' => 'Les Manches Vertes',
+        'Swirl of the Sea' => 'Swirl of the Sea, The',
+        'Chocolate Round O, The' => 'Chocolate Round-O, The',
+        'Chocolate Equation' => 'Chocolate Equation, The',
+        'De\'il Take The Warr' => 'De\'il Take the Wars',
+        'Aberdeen / De\'ils Dead, The' => 'Aberdeen or the De\'il\'s Dead',
+        'Cholocate for Breakfast' => 'Chocolate for Breakfast',
+        'Comical Fellow , The' => 'Comical Fellow, The',
+        'Chrysallis' => 'Chrysalis',
+        'Dance in the Village, The' => 'Dance in the Village',
+        'Dr. Bending\'s Serpent' => 'Doctor Bending\'s Serpent',
+        'Kill Him With Kindness' => 'Kill Him with Kindness',
+        'Leaving of Liverpool' => 'Leaving of Liverpool, The',
+        'Levi Jackson Ragg, The' => 'Levi Jackson Rag',
+        'New Beginning , A' => 'New Beginning, A',
+        'Nightwatch' => 'Night Watch',
+        'Nonesuch Two' => 'Nonesuch II',
+        'Merrily We Dance and Sing / Fiilip, The' => 'Merrily We Dance and Sing',
+        'Miss De Jersey\'s Memorial' => 'Miss de Jersey\'s Memorial',
+        'Prof. Kekule\'s Reverie' => 'Professor Kekule\'s Reverie',
+        'Rose of Sharon, The' => 'Rose of Sharon',
+        'Saint Katherine' => 'Saint Catherine',
+        'Sellenger\'s Round / Beginning of the World, The' => 'Sellenger\'s Round',
+        'Short and the Tall, The / Shooting Stars' => 'Short and the Tall, The',
+        'Unknown Buccaneer, The' => 'Unknown Buccaneer',
+        'Waters of Holland' => 'Waters of Holland, The',
+        'Bell of the Ball' => 'Belle of the Ball',
+        'Belle of Greenboro, The' => 'Belle of Greensboro, The',
+        'Belle of Northampton' => 'Belle of Northampton, The',
+        'Leather Lake House' => 'Leather Lake House (TML)',
+        'Lady Williams\' Delight' => 'Lady Williams\'s Delight',
+        'Nonesuch / A la Mode de France' => 'Nonesuch',
+        'Pleasures of the Town, The / Three Meet' => 'Pleasures of the Town, The',
+        'Trip O\'er Tweed, A' => 'Trip o\'er Tweed, A',
 
     );
 
-    protected function readFromSheet($url, $startYear)
+    protected function readFromSheet($apiKey, $fileKey, $startYear)
     {
+        $sheetId = env($fileKey);
+        $url = 'https://sheets.googleapis.com/v4/spreadsheets/' .
+            $sheetId . '/values/Master?key=' . $apiKey;
+
         $payload = json_decode(file_get_contents($url));
 
         array_shift($payload->values);
@@ -205,14 +239,18 @@ class DatabaseHelper
                 $danceName = $row[0];
             }
 
-//            $dance = Dance::where('name', 'ilike', $danceName)->get();
-            $dance = Dance::whereRaw('LOWER(name) = ?', strtolower($danceName))->get();
-            if ($dance->isEmpty()) {
-                Log::debug("$danceName : $startYear :: dance not found");
-//                continue;
+//            $dance = Dance::whereRaw('LOWER(name) = ?', strtolower($danceName))->get();
+//            if ($dance->isEmpty()) {
+//                Log::debug("$danceName : $startYear :: dance not found");
+//            }
+
+            $dance = Dance::where('name', $danceName)->first();
+            if ($dance == null) {
+                Log::debug("$startYear : '$danceName' => '', :: dance not found");
+                $dance = Dance::create(['name' => $danceName]);
             }
 
-            $dance = Dance::firstOrCreate(['name' => $danceName]);
+//            $dance = Dance::firstOrCreate(['name' => $danceName]);
 
             $dc = explode(', ', $row[1]);
             if (strlen(trim($dc[0])) == 0)

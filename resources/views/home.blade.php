@@ -6,14 +6,7 @@
 
         <div class="row justify-content-center">
             <div class="col-lg-12">
-                <div class="card text-danger lead pl-4">
-                    This site is very much a work in progress and may not always be available and working properly.
-                    <br>
-                    Currently this page only displays a twelve month window, from today.
-                    <br>
-                    Currently this database has records back to September, 2018.
 
-                </div>
                 <div class="card">
                     <div class="card-header">
                         <h5 class="card-title">AACTMAD Tuesday English Country Dance</h5>
