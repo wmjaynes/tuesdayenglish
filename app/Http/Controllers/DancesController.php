@@ -43,7 +43,9 @@ class DancesController extends Controller
 
         $dances = Dance::whereHas('callers', function ($query) use ($danceDate) {
             $query->where('date_of', '>', $danceDate);
-        })->with(['callers' => function ($query) use ($historyDate) {
+        })
+            ->orderBy('dances.name')
+            ->with(['callers' => function ($query) use ($historyDate) {
             $query->where('date_of', '>', $historyDate);
         }])->get();
 
@@ -58,11 +60,12 @@ class DancesController extends Controller
             ->join('callers', 'caller_dance.caller_id', '=', 'callers.id')
             ->whereDate('caller_dance.date_of', '>', $date)
             ->orderBy('caller_dance.date_of', 'desc')
+            ->orderBy('dances.name', 'asc')
             ->select('dances.name as dance_name', 'caller_dance.date_of',
                 'callers.name as caller_name', 'dances.id as dance_id');
 
         $sql = $query->toSql();
-//        Log::debug($sql);
+        Log::debug($sql);
         $dances_callers = $query->get();
 
         // Group dance/callers by date

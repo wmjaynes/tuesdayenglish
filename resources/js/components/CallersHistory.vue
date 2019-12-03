@@ -9,7 +9,7 @@
             month(s);
             <form class="form-inline">
                 <input class="form-control"
-                       placeholder="Quick search on dance name"
+                       placeholder="Quick search on caller name"
                        size="40"
                        type="text"
                        v-model="quickSearchQuery">
