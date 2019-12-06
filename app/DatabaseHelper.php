@@ -187,7 +187,7 @@ class DatabaseHelper
         'New Beginning , A' => 'New Beginning, A',
         'Nightwatch' => 'Night Watch',
         'Nonesuch Two' => 'Nonesuch II',
-        'Merrily We Dance and Sing / Fiilip, The' => 'Merrily We Dance and Sing',
+        'Merrily We Dance and Sing / Fiilip, The' => 'Merrilly We Dance and Sing',
         'Miss De Jersey\'s Memorial' => 'Miss de Jersey\'s Memorial',
         'Prof. Kekule\'s Reverie' => 'Professor Kekule\'s Reverie',
         'Rose of Sharon, The' => 'Rose of Sharon',
@@ -204,6 +204,18 @@ class DatabaseHelper
         'Nonesuch / A la Mode de France' => 'Nonesuch',
         'Pleasures of the Town, The / Three Meet' => 'Pleasures of the Town, The',
         'Trip O\'er Tweed, A' => 'Trip o\'er Tweed, A',
+        'Pilgrim, The / Lord Foppington' => 'Pilgrim, The',
+        'I Care Not For These Ladies' => 'I Care Not for These Ladies',
+        'John Tallis\' Canon' => 'John Tallis\'s Canon',
+        'Jumper\'s Chase' => 'Jumpers Chase',
+        'Mad Robin, The' => 'Mad Robin',
+        'Promise of Spring, The' => 'Promise of Spring',
+        'Trip to Bury' => 'Trip to Bury, A',
+        'White Cockade, The' => 'White Cockade',
+        'Winter Dreams Waltz' => 'Winter Dreams',
+        'Jovial Beggars, The (Bolton)' => 'Jovial Beggars, The (Playford)',
+        'Belle of Greensboro, The' => 'Belle of Greensboro',
+        'Wood Lark, The' => 'Wood Lark',
 
     );
 
