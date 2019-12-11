@@ -118,6 +118,7 @@ class DatabaseHelper
         $this->readFromSheet($apiKey, 'DANCES_DONE_16_17',16);
         $this->readFromSheet($apiKey, 'DANCES_DONE_15_16',15);
         $this->readFromSheet($apiKey, 'DANCES_DONE_14_15',14);
+        $this->readFromSheet($apiKey, 'DANCES_DONE_13_14',13);
 
     }
 
@@ -216,6 +217,8 @@ class DatabaseHelper
         'Jovial Beggars, The (Bolton)' => 'Jovial Beggars, The (Playford)',
         'Belle of Greensboro, The' => 'Belle of Greensboro',
         'Wood Lark, The' => 'Wood Lark',
+        'Cadger\'s Other Caper' => 'Cadgers\' Other Caper',
+        'Maid Peeped Out at the Window / Friar in the Well, The' => 'Maid Peeped Out at the Window'
 
     );
 
