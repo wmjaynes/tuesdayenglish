@@ -119,6 +119,7 @@ class DatabaseHelper
         $this->readFromSheet($apiKey, 'DANCES_DONE_15_16',15);
         $this->readFromSheet($apiKey, 'DANCES_DONE_14_15',14);
         $this->readFromSheet($apiKey, 'DANCES_DONE_13_14',13);
+        $this->readFromSheet($apiKey, 'DANCES_DONE_12_13',12);
 
     }
 
@@ -218,7 +219,20 @@ class DatabaseHelper
         'Belle of Greensboro, The' => 'Belle of Greensboro',
         'Wood Lark, The' => 'Wood Lark',
         'Cadger\'s Other Caper' => 'Cadgers\' Other Caper',
-        'Maid Peeped Out at the Window / Friar in the Well, The' => 'Maid Peeped Out at the Window'
+        'Maid Peeped Out at the Window / Friar in the Well, The' => 'Maid Peeped Out at the Window',
+        'All Saint\'s Day' => 'All Saints\'',
+        'Barham Down (v I & II)' => 'Barham Down',
+        'Black Nag, The' => 'Black Nag',
+        'Blayden Races' => 'Blaydon Races',
+        'Cadger\'s Caper' => 'Cadgers\' Caper',
+        'Danske Delight' => 'Danske Delights',
+        'Fete Champetre' => 'Fête Champêtre',
+        'Handel With Care' => 'Handel with Care',
+        'K & E' => 'K and E',
+        'Mover and Shaker , A' => 'Mover and Shaker, A',
+        'Salutation, The' => 'Salutation',
+        'Short And Sweet' => 'Short and Sweet',
+        'Wright\'s of Lichfield, The' => 'Wrights of Lichfield, The',
 
     );
 
