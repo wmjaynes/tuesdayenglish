@@ -95,9 +95,9 @@ class DatabaseHelper
     protected function loadCallers()
     {
         $apiKey = env('SHEETS_API_KEY');
-        $sheet_18_19 = env('DANCES_DONE_19_20');
+        $most_recent_sheet = env('DANCES_DONE_19_20');
         $url = 'https://sheets.googleapis.com/v4/spreadsheets/' .
-            $sheet_18_19 . '/values/Leaders?key=' . $apiKey;
+            $most_recent_sheet . '/values/Leaders?key=' . $apiKey;
         $payload = json_decode(file_get_contents($url));
 
         array_shift($payload->values);
